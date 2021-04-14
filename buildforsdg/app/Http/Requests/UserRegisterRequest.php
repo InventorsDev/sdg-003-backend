@@ -29,6 +29,7 @@ class UserRegisterRequest extends FormRequest
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email|unique:users',
+            'phonenumber'=>'required',
             'password' => 'required'
         ];
     }
@@ -41,6 +42,7 @@ class UserRegisterRequest extends FormRequest
             'email.required' => 'Email Is Required',
             'email.unique:users' => 'Email Is taken',
             'email.email' => 'Enter a valid Email',
+            'phonenumber.required' => 'phonenumber Is Required',
             'password.required' => 'Password Is Required',
         ];
     }
