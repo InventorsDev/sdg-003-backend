@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -24,4 +27,14 @@ Route::post('register', [
 ]);
 Route::post('login', [
     UserController::class, 'login'
+]);
+
+Route::apiResources([
+    'categories' => CategoriesController::class,
+    'products' => ProductController::class,
+]);
+
+
+Route::get('product/{id}', [
+    ProductsController::class, 'product'
 ]);
