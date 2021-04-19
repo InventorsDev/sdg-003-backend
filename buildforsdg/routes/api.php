@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProductsController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -30,11 +30,12 @@ Route::post('login', [
 ]);
 
 Route::apiResources([
-    'categories' => CategoriesController::class,
+    'categories' => CategoryController::class,
     'products' => ProductController::class,
 ]);
 
 
-Route::get('product/{id}', [
-    ProductsController::class, 'product'
+//fetch all the products in a particular category
+Route::get('product/{cat_id}', [
+    ProductController::class, 'product'
 ]);

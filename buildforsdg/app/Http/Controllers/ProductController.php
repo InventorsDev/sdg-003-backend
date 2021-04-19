@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ProductResource;
-use App\Models\Categories;
+use App\Http\Resources\Product\Product as ProductResource;
+use App\Http\Resources\Product\ProductCollection;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -16,7 +17,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return new ProductResource(Product::all());
+        return new ProductCollection(Product::all());
 
     }
 
@@ -37,9 +38,9 @@ class ProductController extends Controller
     {
         $product = Product::create([
             
-            'product_name' => $request->product_name,
-            'price' => $request->price,
-            'category_id' => $request->category_id,
+            'product_name' => $request->input('product_name'),
+            'price' => $request->input('price'),
+            'category_id' => $request->input('category_id'),
           ]);
     
           return new ProductResource($product);
@@ -88,15 +89,19 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy( $id)
     {
-        $product->delete();
+         $product= Product::destroy($id);
 
-        return response()->json(null, 204);
+
+        return response()->json(['category'=>'category deleted'], 200);
     }
-    public function product($id){
-        $category= Product::where('category_id',$id)->get();
-        return response()->json($category, 201);
+
+
+    //Select products based on a certain categorie
+    public function product($cat_id){
+        $category= Product::where('category_id',$cat_id)->get();
+        return new ProductCollection($category);
 
     }
 }

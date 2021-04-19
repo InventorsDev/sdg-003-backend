@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CategoriesResource;
+use App\Http\Resources\Category\Category as CategoryResource;
+use App\Http\Resources\Category\CategoryCollection;
 use App\Models\Categories;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
-class CategoriesController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +18,8 @@ class CategoriesController extends Controller
     public function index()
     
     {
-        $category= Categories::all();
-        return new CategoriesResource($category);
+    //    return Categories::all();
+        return new CategoryCollection (Category::all());
 
     }
 
@@ -29,11 +31,11 @@ class CategoriesController extends Controller
     
     public function store(Request $request)
     {
-        $category = Categories::create([
-            'category_name' => $request->category_name,
+        $category = Category::create([
+            'category_name' => $request->input('category_name'),
           ]);
     
-          return new CategoriesResource($category);
+          return new CategoryResource($category);
     }
 
     /**
@@ -42,9 +44,9 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Categories $category )
+    public function show(Category $category )
     {
-        return new CategoriesResource($category);    }
+        return new CategoryResource($category);    }
 
     /**
      * Show the form for editing the specified resource.
@@ -61,10 +63,10 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Categories $category)
+    public function update(Request $request, Category $category)
     {
         $category->update($request->only(['category_name']));
-        return new CategoriesResource($category);
+        return new CategoryResource ($category);
     }
 
     /**
@@ -73,11 +75,11 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Categories $category)
+    public function destroy(Category $category)
     { 
         $category->delete();
 
-        return response()->json('category deleted', 204);
+        return response()->json(['category'=>'category deleted'], 204);
         
     }
 
