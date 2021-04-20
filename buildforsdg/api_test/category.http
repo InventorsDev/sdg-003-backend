@@ -1,0 +1,8 @@
+GET   http://127.0.0.1:8000/api/product/2 HTTP/1.1
+content-type:application/json
+
+{
+    "product_name":"Med",
+    "price":"3000",
+    "category_id":"1"
+}

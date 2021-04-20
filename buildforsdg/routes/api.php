@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -24,4 +27,15 @@ Route::post('register', [
 ]);
 Route::post('login', [
     UserController::class, 'login'
+]);
+
+Route::apiResources([
+    'categories' => CategoryController::class,
+    'products' => ProductController::class,
+]);
+
+
+//fetch all the products in a particular category
+Route::get('product/{cat_id}', [
+    ProductController::class, 'product'
 ]);
