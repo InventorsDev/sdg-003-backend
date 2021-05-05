@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 
@@ -30,12 +31,33 @@ Route::post('login', [
 ]);
 
 Route::apiResources([
-    'categories' => CategoryController::class,
+    'category' => CategoryController::class,
     'products' => ProductController::class,
+    'cart'=> CartController::class,
 ]);
 
 
 //fetch all the products in a particular category
 Route::get('product/{cat_id}', [
     ProductController::class, 'product'
+]);
+
+Route::post('orderProduct', [
+    ProductController::class, 'orderProduct'
+])->middleware('jwt.auth');
+Route::get('cart', [
+    CartController::class, 'cart'
+])->middleware('jwt.auth');
+
+Route::delete('cart/deleteProduct/{cart_id}', [
+    CartController::class, 'deleteProduct'
+])->middleware('jwt.auth');
+
+Route::put('cart/updateCart/{cart_id}', [
+    CartController::class, 'updateCart'
+])->middleware('jwt.auth');
+
+
+Route::post('pay', [
+    UserController::class, 'register'
 ]);

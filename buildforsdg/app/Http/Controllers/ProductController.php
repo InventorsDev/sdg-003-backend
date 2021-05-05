@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Cart\Cart as CartResource;
 use App\Http\Resources\Product\Product as ProductResource;
 use App\Http\Resources\Product\ProductCollection;
+use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -15,6 +17,15 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+//     public function __construct()
+// {
+//     $this->middleware('permission:get-all-product', ['only' => ['index']]);
+//          $this->middleware('permission:get-a-product', ['only' => ['show']]);
+//          $this->middleware('permission:create-product', ['only' => ['store']]);
+//          $this->middleware('permission:update-product', ['only' => ['update']]);
+//          $this->middleware('permission:delete-product', ['only' => ['destroy']]);
+// }
+    
     public function index()
     {
         return new ProductCollection(Product::all());
@@ -39,7 +50,8 @@ class ProductController extends Controller
         $product = Product::create([
             
             'product_name' => $request->input('product_name'),
-            'price' => $request->input('price'),
+            'unit_price' => $request->input('unit_price'),
+            'quantity' => $request->input('quantity'),
             'category_id' => $request->input('category_id'),
           ]);
     
@@ -78,7 +90,7 @@ class ProductController extends Controller
     //     return response()->json(['error' => 'You can only edit your own books.'], 403);
     //   }
 
-      $product->update($request->only(['product_name', 'price', 'category_id']));
+      $product->update($request->only(['product_name', 'unit_price', 'quantity','category_id']));
 
       return new ProductResource($product);
     }
@@ -94,7 +106,7 @@ class ProductController extends Controller
          $product= Product::destroy($id);
 
 
-        return response()->json(['category'=>'category deleted'], 200);
+        return response()->json(['category'=>'product deleted'], 200);
     }
 
 
@@ -103,5 +115,26 @@ class ProductController extends Controller
         $category= Product::where('category_id',$cat_id)->get();
         return new ProductCollection($category);
 
+    }
+
+    public function orderProduct(Request $request){
+          $product_id=$request->input('product_id');
+        $product= Product::find($product_id);
+        if($product->quantity > 1 ){
+            $product->update(['quantity'=> $product->quantity - 1]);
+            $cart= Cart::updateOrCreate(['user_id'=> auth('api')->user()->id,'product_id'=> $product_id], [
+            
+                'quantity' => 1,
+                'unit_price' => $product->unit_price,
+                'amount' => $product->unit_price * 1,
+                'user_id'=> auth('api')->user()->id,
+                'product_id'=> $product_id
+    
+            ]); 
+
+            return response()->json(['message'=> 'Product added to your cart!'], 200);
+        }
+
+        return response()->json(['error'=> 'An error occured. Please try again'], 403);
     }
 }
