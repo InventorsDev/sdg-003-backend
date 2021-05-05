@@ -9,11 +9,16 @@ class Product extends Model
 {
     protected $fillable = [
         'product_name',
-        'price',
+        'unit_price',
+        'quantity',
         'category_id',
        
     ];
-    public function categories(){
-        return $this->belongsTo(Categories::class);
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
+
+    public function carts(){
+        return $this->HasMany(Cart::class);
     }
 }

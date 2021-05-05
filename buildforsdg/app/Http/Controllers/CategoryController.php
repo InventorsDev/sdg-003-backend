@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\Category\Category as CategoryResource;
 use App\Http\Resources\Category\CategoryCollection;
-use App\Models\Categories;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+//     public function __construct()
+// {
+//     $this->middleware('permission:get-all-category', ['only' => ['index']]);
+//          $this->middleware('permission:get-a-category', ['only' => ['show']]);
+//          $this->middleware('permission:create-category', ['only' => ['store']]);
+//          $this->middleware('permission:update-category', ['only' => ['update']]);
+//          $this->middleware('permission:delete-category', ['only' => ['destroy']]);
+// }
     /**
      * Display a listing of the resource.
      *

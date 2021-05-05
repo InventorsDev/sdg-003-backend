@@ -9,9 +9,12 @@ use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
 use Illuminate\Http\Request;
+use App\Traits\Auth\AuthResponse;
 
 class UserController extends Controller
 {
+    private $role;
+    use AuthResponse;
     public function register(UserRegisterRequest $request)
     {
       
@@ -32,6 +35,7 @@ class UserController extends Controller
 
     public function login(UserLoginRequest $request)
     {
+       
 
         $credentials = $request->only('email', 'password');
         try {
@@ -45,9 +49,15 @@ class UserController extends Controller
                 'error' => 'Could not create token'
             ], 500);
         }
-        return response()->json([
-            'token' => $token
-        ], 200);
+        // $user =User::where('email',request('email'));
+        // if ($user){
+        //     $user->hasRole('admin') ? $this->role="admin" : $this->role="user";
+        // }
+
+        return $this->respondWithToken($token, $this->role);
+        // return response()->json([
+        //     'token' => $token
+        // ], 200);
     }
     
 }
